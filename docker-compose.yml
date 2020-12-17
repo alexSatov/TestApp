@@ -1,0 +1,12 @@
+version: '3.5'
+services:
+    s1:
+        image: apiservice1
+        container_name: apiservice1
+        ports:
+            - 2001:80
+    s2:
+        image: apiservice2
+        container_name: apiservice2
+        ports:
+            - 2002:80
