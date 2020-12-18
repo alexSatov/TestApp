@@ -9,17 +9,17 @@ namespace TestApp
 		}
 	}
 
-	public class BaseType
+	public class SomeType
 	{
 		public string Type { get; set; }
 
-		public BaseType()
+		public SomeType()
 		{
 			Type = GetType().Name;
 		}
 	}
 
-	public class Type : BaseType
+	public class Type : SomeType
 	{
 	}
 }
