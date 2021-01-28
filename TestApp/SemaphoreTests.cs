@@ -1,3 +1,6 @@
+using System;
+using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
@@ -40,6 +43,24 @@ namespace TestApp
 			task.Wait();
 
 			counter.Should().Be(3);
+		}
+
+		[TestCase(1000)]
+		[TestCase(1000000)]
+		[TestCase(10000000)]
+		public void SemaphoreMaxCount(int maxCount)
+		{
+			GC.Collect();
+
+			var watch = Stopwatch.StartNew();
+
+			var semaphores = Enumerable.Range(0, maxCount)
+				.Select(_ => new SemaphoreSlim(1, 1))
+				.ToList();
+
+			var size = GC.GetTotalMemory(true) / 1000;
+
+			Console.WriteLine($"{semaphores.Count} of {size}KB created in {watch.Elapsed}");
 		}
 	}
 }
