@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using NUnit.Framework;
 
 namespace TestApp
@@ -32,6 +33,23 @@ namespace TestApp
                 .AsParallel()
                 .Select(i => Math.Cos(i) + Math.Sin(i))
                 .ToList();
+
+            watch.Stop();
+
+            Console.WriteLine($"Result count {result.Count}, parallel true: {watch.Elapsed}");
+        }
+
+        [Test]
+        public void ParallelTasks()
+        {
+            var watch = Stopwatch.StartNew();
+
+            var tasks = Enumerable.Range(0, 10)
+                .Select(t => Task.Run(() => Enumerable.Range(t * 10000000, 10000000)
+                    .Select(i => Math.Cos(i) + Math.Sin(i))
+                    .ToList()));
+
+            var result = tasks.SelectMany(t => t.Result).ToList();
 
             watch.Stop();
 
