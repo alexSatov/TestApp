@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using FluentAssertions;
 using NUnit.Framework;
 
 namespace TestApp
@@ -80,6 +83,22 @@ namespace TestApp
             watch.Stop();
 
             Console.WriteLine($"Result count {result.Count}, parallel false: {watch.Elapsed}");
+        }
+
+        [Test]
+        public void ListAdd_NotThreadSafe()
+        {
+            var target = new List<int>();
+
+            var source = ParallelEnumerable.Range(0, 100000000)
+                .Select(i =>
+                {
+                    target.Add(i);
+                    return i;
+                })
+                .ToList();
+
+            target.Count.Should().NotBe(source.Count);
         }
     }
 }
