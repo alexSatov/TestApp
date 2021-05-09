@@ -96,6 +96,76 @@ namespace TestApp
 			obj.Should().BeEquivalentTo(obj4);
 		}
 
+		[Test]
+		public void Test_Record()
+		{
+			var record = new TestRecord("test", 1);
+			var json = JsonConvert.SerializeObject(record);
+			var jsonRecord = JsonConvert.DeserializeObject<TestRecord>(json);
+
+			record.Should().BeEquivalentTo(jsonRecord);
+		}
+
+		[Test]
+		public void Test_InitClass()
+		{
+			var obj = new TestInitClass { StringValue = "test", IntValue = 1 };
+			var json = JsonConvert.SerializeObject(obj);
+			var jsonObj = JsonConvert.DeserializeObject<TestInitClass>(json);
+
+			obj.Should().BeEquivalentTo(jsonObj);
+		}
+
+		[Test]
+		public void Test_InitClass2()
+		{
+			var obj = new TestInitClass("test", 1);
+			var json = JsonConvert.SerializeObject(obj);
+			var jsonObj = JsonConvert.DeserializeObject<TestInitClass>(json);
+
+			obj.Should().BeEquivalentTo(jsonObj);
+		}
+
+		[Test]
+		public void Test_ReadonlyStruct()
+		{
+			var obj = new TestStruct { StringValue = "test", IntValue = 1 };
+			var json = JsonConvert.SerializeObject(obj);
+			var jsonObj = JsonConvert.DeserializeObject<TestStruct>(json);
+
+			obj.Should().BeEquivalentTo(jsonObj);
+		}
+
+		private record TestRecord(string StringValue, int IntValue);
+
+		private class TestInitClass
+		{
+			public string StringValue { get; init; }
+			public int IntValue { get; init; }
+
+			public TestInitClass(string stringValue, int intValue)
+			{
+				StringValue = stringValue;
+				IntValue = intValue;
+			}
+
+			public TestInitClass()
+			{
+			}
+		}
+
+		private readonly struct TestStruct
+		{
+			public string StringValue { get; init; }
+			public int IntValue { get; init; }
+
+			public TestStruct(string stringValue, int intValue)
+			{
+				StringValue = stringValue;
+				IntValue = intValue;
+			}
+		}
+
 		private abstract class BaseType
 		{
 			public string Base { get; set; }
