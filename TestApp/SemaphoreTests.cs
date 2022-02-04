@@ -12,9 +12,19 @@ namespace TestApp
 	public class SemaphoreTests
 	{
 		[Test]
+		public void WaitZeroTimeout()
+		{
+			using var semaphore = new SemaphoreSlim(1, 1);
+			var result = semaphore.Wait(0);
+
+			result.Should().BeTrue();
+			semaphore.CurrentCount.Should().Be(0);
+		}
+
+		[Test]
 		public void MultipleRelease()
 		{
-			var semaphore = new SemaphoreSlim(1, 1);
+			using var semaphore = new SemaphoreSlim(1, 1);
 			Assert.Throws<SemaphoreFullException>(() => semaphore.Release());
 		}
 
